@@ -2,7 +2,10 @@
 searching platform
 
 Data Structure used
+
+
 -> Trie
+
 
 
 Algorithm used
