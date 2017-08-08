@@ -6,6 +6,8 @@ Data Structure used
 
 
 Algorithm used
+
+
 -> Boyer moore algorithm for phrase search
 
 
