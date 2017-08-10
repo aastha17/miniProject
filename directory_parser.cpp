@@ -9,39 +9,43 @@ using namespace std;
 
 vector<string> files;
 
+void TransverseDirectory(string path)
+{
+    WIN32_FIND_DATA data;
+    string fname = path + "\\*.*";
+    HANDLE h = FindFirstFile(fname.c_str(),&data);
+    if(h != INVALID_HANDLE_VALUE)
+    {
+        do {
+            if( (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) )
+            {
+                if( strcmp(data.cFileName,".") != 0 &&strcmp(data.cFileName,"..") != 0)
+                {
+                    fname = path + "\\" + data.cFileName;
+                    TransverseDirectory(fname);
+                }
+            }
+            else
+            {
+                string x=path+"\\*.txt";
+                string a= data.cFileName;
+                reverse(a.begin(),a.end());
+                if(a[0]=='t' && a[1]=='x' && a[2]=='t')
+                files.push_back(path + "\\" +data.cFileName);
 
-void GetTextFiles(std::string path) {
-	HANDLE hFind;
-	WIN32_FIND_DATA data;
-
-	//std::string search_path = path ;//+ "\\*.txt";
-	string search_path=path+ "\\*.*";
-	hFind = FindFirstFile(search_path.c_str(), &data);
-    if (hFind != INVALID_HANDLE_VALUE) {
-		do {
-            //if(hFind->d_type==DT_DIR)GetTextFiles()
-            /*if((data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0//calling recursive function to access subdirectories->not working
-              && data.cFileName != "."
-              && data.cFileName != "..")
-              GetTextFiles(data.cFileName);
-              else*/
-
-			files.push_back(path + '\\' + data.cFileName);
-		} while (FindNextFile(hFind, &data));
-		FindClose(hFind);
-		return;
-	}
-
-
+            }
+        }while( FindNextFile(h,&data) != 0);
+        FindClose(h);
+    }
+    return;
 }
-
-int main()
+int main(int argc, char* argv[])
 {
     string path;
     cin>>path;
-    //vector<string>result;
-    GetTextFiles(path);
-    for(int i=0;i<files.size();i++)cout<<files[i]<<endl;
-    return 0;
+    TransverseDirectory(path);
 
+    return 0;
 }
+
+
